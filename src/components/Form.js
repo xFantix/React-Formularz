@@ -1,7 +1,9 @@
-import React from 'react'
-import {  Grid, Paper,Avatar,makeStyles, TextField,Checkbox,FormControlLabel, Button} from '@material-ui/core';
+import React,{useState} from 'react'
+import {  Grid, Paper,Avatar,makeStyles, TextField,Button} from '@material-ui/core';
 import { deepOrange } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
+import {add} from '../globalStore/formSlice/formSlice';
+import {useDispatch } from 'react-redux';
 
 const Form = () => {
     
@@ -29,42 +31,47 @@ const Form = () => {
        
       }));
 
-      const OrangeCheckbox = withStyles({
-        root: {
-            color: deepOrange[500],
-          '&$checked': {
-            color: deepOrange[500],
-          },
-        },
-        checked: {},
-      })((props) => <Checkbox color="default" {...props} />);
-
+      
       const OrangeButton = withStyles({
         root: {
             backgroundColor: deepOrange[500],
             color:"white",
             margin:20,
         },
-        checked: {},
       })((props) => <Button variant="contained" type="submit"  {...props} />);
     
     
       const classes = useStyles();
 
+     
+      const [name,setName] = useState("");
+      const [surname,setSurname]=useState("");
+
+      const dispatch = useDispatch();  
+
+      const handleSendSubmit=(e)=>{
+        e.preventDefault();
+        
+        const person = {
+          "name":name,
+          "surname":surname,
+        }
+        dispatch(add(person));
+
+      }
+
+     
     return ( 
         <Paper elevation={3}>
             <Grid align="center" className={classes.paperStyle}>
             <Avatar  alt="icon" className={classes.orange} />
             <h2 className={classes.headerStyle}>Zarejestruj się</h2>
             </Grid>
-            <form noValidate autoComplete="off" className={classes.formStyle}>
-                <TextField className={classes.inputTextStyle}  id="standard-error" label="Imię" />
-                <TextField className={classes.inputTextStyle} id="standard-error" label="Nazwisko"/>
-                <FormControlLabel
-                    control={<OrangeCheckbox className={classes.checkboxStyle}  name="checkedG" />}
-                    label="Potwierdzam regulamin"
-                />
-                <OrangeButton disableElevation variant="contained">Zapisz</OrangeButton>
+            <form onSubmit={handleSendSubmit} noValidate autoComplete="off" className={classes.formStyle}>
+                <TextField className={classes.inputTextStyle}  id="standard-error" label="Imię" value={name} onChange={event=>setName(event.target.value)}  />
+                <TextField className={classes.inputTextStyle} id="standard-error" label="Nazwisko" value={surname} onChange={event =>setSurname(event.target.value)}/>
+               
+                <OrangeButton type="submit" disableElevation variant="contained">Zapisz</OrangeButton>
             </form>
         </Paper>
      );
