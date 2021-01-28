@@ -2,8 +2,8 @@ import React,{useState} from 'react'
 import {  Grid, Paper,Avatar,makeStyles, TextField,Button} from '@material-ui/core';
 import { deepOrange } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
-import {add} from '../globalStore/formSlice/formSlice';
-import {useDispatch } from 'react-redux';
+import {add, selectAllPeople} from '../globalStore/formSlice/formSlice';
+import {useDispatch,useSelector } from 'react-redux';
 
 const Form = () => {
     
@@ -42,7 +42,7 @@ const Form = () => {
     
     
       const classes = useStyles();
-
+      const allPeople = useSelector(selectAllPeople);
      
       const [name,setName] = useState("");
       const [surname,setSurname]=useState("");
@@ -57,7 +57,7 @@ const Form = () => {
           "surname":surname,
         }
         dispatch(add(person));
-
+        console.log(allPeople);
       }
 
      
@@ -70,7 +70,6 @@ const Form = () => {
             <form onSubmit={handleSendSubmit} noValidate autoComplete="off" className={classes.formStyle}>
                 <TextField className={classes.inputTextStyle}  id="standard-error" label="Imię" value={name} onChange={event=>setName(event.target.value)}  />
                 <TextField className={classes.inputTextStyle} id="standard-error" label="Nazwisko" value={surname} onChange={event =>setSurname(event.target.value)}/>
-               
                 <OrangeButton type="submit" disableElevation variant="contained">Zapisz</OrangeButton>
             </form>
         </Paper>

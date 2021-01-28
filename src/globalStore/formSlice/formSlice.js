@@ -12,6 +12,8 @@ export const slice = createSlice({
     }
 })
 
+export const selectAllPeople = state => state.form.people;
+
 export const {add} = slice.actions;
 
 export default slice.reducer;
